@@ -54,8 +54,7 @@ def cli_args():
         "--port",
         type=int,
         default=12345,
-        help="(Optional): the amount of time to run the spammer "
-        "(default continious)",
+        help="(Optional): which port to listen/send on (default port 12345)",
     )
 
     if len(sys.argv) == 1:
@@ -115,7 +114,7 @@ def mcast_client(group, port):
     igmp_req = struct.pack("4sl", socket.inet_aton(group), socket.INADDR_ANY)
     client.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, igmp_req)
 
-    print(f"\n\nListing for multicast stream on {group}({port})...\n")
+    print(f"\n\nListening for multicast stream on {group}({port})...\n")
 
     packet_num = 1
     try:
