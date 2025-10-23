@@ -82,23 +82,6 @@ Simulate topology‑change notifications for VLAN 100 fifty times.
 * Monitor network equipment resources during tests—multicast traffic duplication and tree building can place load on switches/routers.
 * Be aware of IGMP and MLD configurations on your test network; if snooping or proxying aren’t enabled, behaviour may differ.
 
-## Contributing
-
-Contributions are welcome! If you have enhancements, new tools, bug‑fixes, or scenario scripts, please submit a pull request.
-Before submitting, please ensure:
-
-* your code follows the existing style
-* you document any new command‑line options or behaviour
-* you include tests or example scenarios if applicable
-
-## License
-
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-
-## Acknowledgements / References
-
-* For background on multicast and group management, see “IGMP Snooping: A Comprehensive Network Multicast Guide”.
-* Useful prior‑art on multicast traffic generation and testing includes the NASA/NRL MGEN tool.
 
 ---
 
