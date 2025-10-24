@@ -4,7 +4,7 @@ A collection of multicast‑testing utilities for lab environments and network r
 
 ## Overview
 
-This repository contains a set of Python‑based tools designed to generate, manipulate, and test IP multicast traffic in lab / network recreation scenarios. These tools are useful for validating multicast forwarding, IGMP/MLD group behaviour, flooding quirks, and other multicast‑specific network conditions.
+This repository contains a set of Python‑based tools designed to generate, manipulate, and test IP multicast traffic in lab / network recreation scenarios. These tools are useful for validating multicast forwarding, IGMP group behaviour, flooding quirks, and other multicast‑specific network conditions.
 
 ## Included Tools
 
@@ -14,8 +14,6 @@ This repository contains a set of Python‑based tools designed to generate, man
 * `tcn_flood.py` – generates topology change notifications (TCNs) for spurious STP / topology‑reconfiguration scenarios (where applicable).
 
 > Note: As this is a lab and recreate toolset, please use responsibly and **only** in isolated test/lab networks—these tools may disrupt production environments.
-
-## Getting Started
 
 ### Requirements
 
@@ -33,56 +31,6 @@ python3 -m venv venv
 source venv/bin/activate  
 pip install -r requirements.txt  # if any dependencies  
 ```
-
-### Usage Examples
-
-#### `mcast_generator.py`
-
-```bash
-python3 mcast_generator.py --group 239.1.1.1 --port 5000 --ttl 10 --interval 500  
-```
-
-Send UDP packets continuously to multicast group `239.1.1.1:5000` with TTL 10 and 500ms between packets.
-
-#### `igmp_spammer.py`
-
-```bash
-python3 igmp_spammer.py --group 224.0.0.5 --count 1000 --leave-after 30  
-```
-
-Generate 1000 IGMP join/leave cycles for group `224.0.0.5`, leaving after 30 seconds.
-
-#### `ssdp_slammer.py`
-
-```bash
-python3 ssdp_slammer.py --target-device "MyDevice" --repeat 100  
-```
-
-Flood SSDP traffic for device discovery tests.
-
-#### `tcn_flood.py`
-
-```bash
-python3 tcn_flood.py --vlan 100 --repeat 50  
-```
-
-Simulate topology‑change notifications for VLAN 100 fifty times.
-
-## Use Cases & Scenarios
-
-* Validate that a network switch/router correctly handles IGMP joins/leaves, and only forwards multicast traffic to group members (i.e., IGMP snooping behaviour).
-* Stress‑test multicast forwarding paths by generating high volume or erratic multicast UDP traffic (via `mcast_generator.py`).
-* Recreate multicast misconfigurations (flooding, missing IGMP membership reports, unintended traffic flooding) for lab‑based learning.
-* Test device discovery behaviours (via SSDP flooding) and topology‑change effects in multicast‑heavy networks.
-
-## Warnings & Best Practices
-
-* **Always** use in a confined lab or test environment. These tools can generate traffic patterns that may bring down mis‑configured or production networks.
-* Ensure TTL values, interface binding, and multicast group address ranges are chosen carefully. Improper use may cause cross‑layer flooding or unintended network impact.
-* Monitor network equipment resources during tests—multicast traffic duplication and tree building can place load on switches/routers.
-* Be aware of IGMP and MLD configurations on your test network; if snooping or proxying aren’t enabled, behaviour may differ.
-
-
 ---
 
 > *“A collection of multicast tools I use for lab testing and recreates.”*
