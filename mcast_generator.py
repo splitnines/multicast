@@ -56,6 +56,13 @@ def cli_args():
         default=12345,
         help="(Optional): which port to listen/send on (default port 12345)",
     )
+    parser.add_argument(
+        "-i",
+        "--interface",
+        type=str,
+        default=None,
+        help="(Optional): specify an interface to listen/send on",
+    )
 
     if len(sys.argv) == 1:
         parser.print_help(sys.stderr)
@@ -71,13 +78,17 @@ def generate_random_data(length=1024):
     return "".join(random.choice(random_data) for _ in range(length))
 
 
-def mcast_server(group, port, rate, duration):
+def mcast_server(group, port, rate, duration, iface):
     server = socket.socket(
         socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP
     )
 
     ttl = struct.pack("b", 32)
     server.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, ttl)
+    if iface is not None:
+        server.setsockopt(
+            socket.SOL_SOCKET, socket.SO_BINDTODEVICE, iface.encode()
+        )
 
     random_data = generate_random_data()
     packet_num = 1
@@ -103,11 +114,15 @@ def mcast_server(group, port, rate, duration):
         server.close()
 
 
-def mcast_client(group, port):
+def mcast_client(group, port, iface):
     client = socket.socket(
         socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP
     )
     client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    if iface is not None:
+        client.setsockopt(
+            socket.SOL_SOCKET, socket.SO_BINDTODEVICE, iface.encode()
+        )
 
     client.bind(("", port))
 
@@ -141,11 +156,12 @@ def main():
     mcast_group = args.group
     mcast_port = args.port
     duration = args.time
+    iface = args.interface
 
     if args.server is True:
-        mcast_server(mcast_group, mcast_port, rate_pps, duration)
+        mcast_server(mcast_group, mcast_port, rate_pps, duration, iface)
     if args.client is True:
-        mcast_client(mcast_group, mcast_port)
+        mcast_client(mcast_group, mcast_port, iface)
 
 
 if __name__ == "__main__":
